@@ -1,0 +1,23 @@
+{
+  "name": "api-provider-ellipse",
+  "version": "0.0.1-alpha.1",
+  "description": "API provider for building api-core base APIs consumable via HTTP using the Ellipse framework.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajuhos/api-provider-ellipse.git"
+  },
+  "author": "We Are Break <ajuhos@we-are-break.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ajuhos/api-provider-ellipse/issues"
+  },
+  "homepage": "https://github.com/ajuhos/api-provider-ellipse#readme",
+  "dependencies": {
+    "api-core": "0.0.9-alpha.1",
+    "ellipse": "^0.18.8-alpha.9"
+  }
+}
