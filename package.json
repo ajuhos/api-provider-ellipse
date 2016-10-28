@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/ajuhos/api-provider-ellipse#readme",
   "dependencies": {
-    "api-core": "0.0.9-alpha.1",
+    "api-core": "^0.0.9-alpha.3",
     "ellipse": "^0.18.8-alpha.9"
   }
 }
