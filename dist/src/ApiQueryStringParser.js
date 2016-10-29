@@ -25,7 +25,7 @@ class ApiQueryStringParser {
         const edge = lastSegment.edge, oneToOneRelations = edge.relations.filter(r => r instanceof api_core_1.OneToOneRelation).map(r => r.name);
         if (query.fields) {
             query.fields.split(',').forEach((field) => {
-                if (!edge.fields.indexOf(field)) {
+                if (edge.fields.indexOf(field) == -1) {
                     throw new api_core_1.ApiEdgeError(400, `Invalid Field: ${field}`);
                 }
                 context.field(field);
@@ -33,16 +33,17 @@ class ApiQueryStringParser {
         }
         if (query.embed) {
             query.embed.split(',').forEach((field) => {
-                if (!oneToOneRelations.indexOf(field)) {
+                const relationId = oneToOneRelations.indexOf(field);
+                if (relationId == -1) {
                     throw new api_core_1.ApiEdgeError(400, `Invalid Related Field: ${field}`);
                 }
-                context.populate(field);
+                context.populate(edge.relations[relationId].relationId);
             });
         }
         if (query.sort) {
             query.sort.split(',').forEach((s) => {
                 const field = s.substring(s[0] == '-' ? 1 : 0), direction = s[0] !== '-';
-                if (!edge.fields.indexOf(field)) {
+                if (edge.fields.indexOf(field) == -1) {
                     throw new api_core_1.ApiEdgeError(400, `Invalid Field: ${field}`);
                 }
                 context.sort(field, direction);
@@ -67,14 +68,14 @@ class ApiQueryStringParser {
                     const parts = extractWhereClauseParts(key);
                     if (parts.length == 1) {
                         key = parts[0];
-                        if (!edge.fields.indexOf(key)) {
+                        if (edge.fields.indexOf(key) == -1) {
                             throw new api_core_1.ApiEdgeError(400, `Invalid Field: ${key}`);
                         }
                         context.filter(key, api_core_1.ApiEdgeQueryFilterType.Equals, value);
                     }
                     else if (parts.length == 2) {
                         key = parts[1];
-                        if (!edge.fields.indexOf(key)) {
+                        if (edge.fields.indexOf(key) == -1) {
                             throw new api_core_1.ApiEdgeError(400, `Invalid Field: ${key}`);
                         }
                         switch (parts[0]) {
@@ -102,7 +103,7 @@ class ApiQueryStringParser {
                     }
                 }
                 else {
-                    if (!edge.fields.indexOf(key)) {
+                    if (edge.fields.indexOf(key) == -1) {
                         throw new api_core_1.ApiEdgeError(400, `Invalid Field: ${key}`);
                     }
                     context.filter(key, api_core_1.ApiEdgeQueryFilterType.Equals, value);

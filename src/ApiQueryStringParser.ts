@@ -39,7 +39,7 @@ export class ApiQueryStringParser {
 
         if (query.fields) {
             query.fields.split(',').forEach((field: string) => {
-                if(!edge.fields.indexOf(field)) {
+                if(edge.fields.indexOf(field) == -1) {
                     throw new ApiEdgeError(400, `Invalid Field: ${field}`);
                 }
 
@@ -49,11 +49,13 @@ export class ApiQueryStringParser {
 
         if (query.embed) {
             query.embed.split(',').forEach((field: string) => {
-                if(!oneToOneRelations.indexOf(field)) {
+                const relationId = oneToOneRelations.indexOf(field);
+
+                if(relationId == -1) {
                     throw new ApiEdgeError(400, `Invalid Related Field: ${field}`);
                 }
 
-                context.populate(field)
+                context.populate(edge.relations[relationId].relationId)
             })
         }
 
@@ -62,7 +64,7 @@ export class ApiQueryStringParser {
                 const field = s.substring(s[0] == '-' ? 1 : 0),
                     direction = s[0] !== '-';
 
-                if(!edge.fields.indexOf(field)) {
+                if(edge.fields.indexOf(field) == -1) {
                     throw new ApiEdgeError(400, `Invalid Field: ${field}`);
                 }
 
@@ -96,7 +98,7 @@ export class ApiQueryStringParser {
                     if(parts.length == 1) {
                         key = parts[0];
 
-                        if(!edge.fields.indexOf(key)) {
+                        if(edge.fields.indexOf(key) == -1) {
                             throw new ApiEdgeError(400, `Invalid Field: ${key}`);
                         }
 
@@ -105,7 +107,7 @@ export class ApiQueryStringParser {
                     else if(parts.length == 2) {
                         key = parts[1];
 
-                        if(!edge.fields.indexOf(key)) {
+                        if(edge.fields.indexOf(key) == -1) {
                             throw new ApiEdgeError(400, `Invalid Field: ${key}`);
                         }
 
@@ -134,7 +136,7 @@ export class ApiQueryStringParser {
                     }
                 }
                 else {
-                    if(!edge.fields.indexOf(key)) {
+                    if(edge.fields.indexOf(key) == -1) {
                         throw new ApiEdgeError(400, `Invalid Field: ${key}`);
                     }
 
