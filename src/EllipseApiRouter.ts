@@ -32,8 +32,11 @@ export class EllipseApiRouter {
         });
 
         app.all('/*', function (req: any, res: any, next: any) {
-            if(!this.api) this.api = router.defaultApi;
-            req.apiPath = req.path.replace('/', '');
+            if(!this.api) {
+                this.api = router.defaultApi;
+                req.apiPath = req.path.replace('/', '');
+            }
+
             next()
         });
 
