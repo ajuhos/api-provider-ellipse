@@ -88,7 +88,7 @@ export class ApiQueryStringParser {
         }
 
         Object.keys(query).forEach(key => {
-            if(query.hasOwnProperty(key)) {
+            if(query.hasOwnProperty(key) && excludedKeys.indexOf(key) == -1) {
                 const value = query[key];
 
                 if(key.substring(0, 5) == "where") {
