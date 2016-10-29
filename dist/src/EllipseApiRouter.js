@@ -1,5 +1,6 @@
 "use strict";
 const api_core_1 = require("api-core");
+const ApiQueryStringParser_1 = require("./ApiQueryStringParser");
 class EllipseApiRouter {
     constructor(...apis) {
         this.apply = (app) => {
@@ -29,26 +30,14 @@ class EllipseApiRouter {
                 else {
                     try {
                         let request = this.api.parseRequest(req.path.split('/'));
-                        if (req.query.fields)
-                            request.context.fields = req.query.fields.split(',');
-                        if (req.query.populate)
-                            request.context.populatedFields = req.query.populate.split(',');
-                        if (req.query.sort)
-                            req.query.sort.split(',')
-                                .forEach((s) => request.context.sort(s.substring(s[0] == '-' ? 1 : 0), s[0] !== '-'));
-                        let limit = +req.query.limit, skip = +req.query.skip, page = +req.query.page;
-                        if (limit === limit ||
-                            skip === skip ||
-                            page === page) {
-                            limit = limit || 10;
-                            if (page)
-                                skip = (page - 1) * limit;
-                            else
-                                skip = skip || 0;
-                            request.context.paginate(skip, limit);
+                        if (!request.path.segments.length) {
+                            this.error = new api_core_1.ApiEdgeError(404, 'Not Found');
+                            return next();
                         }
-                        if (req.body)
+                        request.context = ApiQueryStringParser_1.ApiQueryStringParser.parse(req.query, request.path);
+                        if (req.body) {
                             request.body = req.body;
+                        }
                         switch (req.method) {
                             case "GET":
                                 request.type = api_core_1.ApiRequestType.Read;
@@ -72,8 +61,8 @@ class EllipseApiRouter {
                             this.json = resp.data;
                             if (resp.metadata) {
                                 if (resp.metadata.pagination) {
-                                    let total = resp.metadata.pagination.total || 0;
-                                    res.setHeader('X-Total-Count', page ? Math.ceil(total / limit) : total);
+                                    const total = resp.metadata.pagination.total || 0, limit = +req.query.limit || ApiQueryStringParser_1.ApiQueryStringParser.defaultLimit;
+                                    res.setHeader('X-Total-Count', req.query.page ? Math.ceil(total / limit) : total);
                                 }
                             }
                             this.send();
