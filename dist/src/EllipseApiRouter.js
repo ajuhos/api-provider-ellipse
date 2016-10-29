@@ -32,6 +32,8 @@ class EllipseApiRouter extends ellipse_1.Router {
                         let request = this.api.parseRequest(req.path.split('/'));
                         if (req.query.fields)
                             request.context.fields = req.query.fields.split(',');
+                        if (req.query.populate)
+                            request.context.populatedFields = req.query.populate.split(',');
                         if (req.query.sort)
                             req.query.sort.split(',')
                                 .forEach((s) => request.context.sort(s.substring(s[0] == '-' ? 1 : 0), s[0] !== '-'));

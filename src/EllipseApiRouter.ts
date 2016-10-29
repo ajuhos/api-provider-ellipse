@@ -48,6 +48,9 @@ export class EllipseApiRouter extends Router {
                     if (req.query.fields)
                         request.context.fields = req.query.fields.split(',');
 
+                    if (req.query.populate)
+                        request.context.populatedFields = req.query.populate.split(',');
+
                     if (req.query.sort)
                         req.query.sort.split(',')
                             .forEach((s: string) =>
