@@ -20,7 +20,7 @@ export class EllipseApiRouter extends Router {
     apply = (app: any) => {
         let router = this;
 
-        app.all('/api/v:version/*', function(req: any, res: any, next: any) {
+        app.all('/v:version/*', function(req: any, res: any, next: any) {
             let index = router.apiVersions.indexOf(req.params.version);
             if(index == -1) {
                 this.error = new ApiEdgeError(400, "Unsupported API version");
@@ -28,14 +28,14 @@ export class EllipseApiRouter extends Router {
             }
             else {
                 this.api = router.apis[index];
-                req.path = req.path.replace(`/api/v${this.api.version}/`, '');
+                req.path = req.path.replace(`/v${this.api.version}/`, '');
                 next()
             }
         });
 
         app.all('/api/*', function (req: any, res: any, next: any) {
             if(!this.api) this.api = router.defaultApi;
-            req.path = req.path.replace('/api/', '');
+            if(req.path[0] == '/') req.path = req.path.replace('/', '');
             next()
         });
 

@@ -1,6 +1,6 @@
 {
   "name": "api-provider-ellipse",
-  "version": "0.0.1-alpha.3",
+  "version": "0.0.1-alpha.4",
   "description": "API provider for building api-core base APIs consumable via HTTP using the Ellipse framework.",
   "main": "dist/index.js",
   "scripts": {
