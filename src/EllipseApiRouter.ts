@@ -1,7 +1,6 @@
 import {ApiEdgeDefinition, ApiEdgeError, ApiEdgeQueryResponse, Api, ApiRequestType} from "api-core";
-import {Router} from "ellipse"; //Currently no definition file exists for ellipse.
 
-export class EllipseApiRouter extends Router {
+export class EllipseApiRouter {
 
     defaultApi: Api;
     apis: Api[];
@@ -9,8 +8,6 @@ export class EllipseApiRouter extends Router {
     private apiVersions: string[];
 
     constructor(...apis: Api[]) {
-        super();
-
         this.apis = apis;
         this.defaultApi = apis[0];
 

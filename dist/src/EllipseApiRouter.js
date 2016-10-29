@@ -1,9 +1,7 @@
 "use strict";
 const api_core_1 = require("api-core");
-const ellipse_1 = require("ellipse");
-class EllipseApiRouter extends ellipse_1.Router {
+class EllipseApiRouter {
     constructor(...apis) {
-        super();
         this.apply = (app) => {
             let router = this;
             app.all('/v:version/*', function (req, res, next) {

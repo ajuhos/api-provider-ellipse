@@ -1,6 +1,5 @@
 import { Api } from "api-core";
-import { Router } from "ellipse";
-export declare class EllipseApiRouter extends Router {
+export declare class EllipseApiRouter {
     defaultApi: Api;
     apis: Api[];
     private apiVersions;
