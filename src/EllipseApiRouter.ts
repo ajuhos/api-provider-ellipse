@@ -79,8 +79,6 @@ export class EllipseApiRouter {
 
                     query.execute()
                         .then((resp: ApiEdgeQueryResponse) => {
-                            this.json = resp.data;
-
                             if(resp.metadata) {
                                 if(resp.metadata.pagination) {
                                     const total = resp.metadata.pagination.total || 0,
@@ -89,7 +87,7 @@ export class EllipseApiRouter {
                                 }
                             }
 
-                            this.send()
+                            res.json(resp.data)
                         })
                         .catch((e: any) => {
                             this.error = e;

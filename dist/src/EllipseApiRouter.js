@@ -58,14 +58,13 @@ class EllipseApiRouter {
                         let query = this.api.buildQuery(request);
                         query.execute()
                             .then((resp) => {
-                            this.json = resp.data;
                             if (resp.metadata) {
                                 if (resp.metadata.pagination) {
                                     const total = resp.metadata.pagination.total || 0, limit = +req.query.limit || ApiQueryStringParser_1.ApiQueryStringParser.defaultLimit;
                                     res.setHeader('X-Total-Count', req.query.page ? Math.ceil(total / limit) : total);
                                 }
                             }
-                            this.send();
+                            res.json(resp.data);
                         })
                             .catch((e) => {
                             this.error = e;
