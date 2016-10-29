@@ -13,15 +13,14 @@ class EllipseApiRouter {
                 }
                 else {
                     this.api = router.apis[index];
-                    req.path = req.path.replace(`/v${this.api.version}/`, '');
+                    req.apiPath = req.path.replace(`/v${this.api.version}/`, '');
                     next();
                 }
             });
             app.all('/*', function (req, res, next) {
                 if (!this.api)
                     this.api = router.defaultApi;
-                if (req.path[0] == '/')
-                    req.path = req.path.replace('/', '');
+                req.apiPath = req.path.replace('/', '');
                 next();
             });
             app.use(function (req, res, next) {
@@ -29,7 +28,7 @@ class EllipseApiRouter {
                     next();
                 else {
                     try {
-                        let request = this.api.parseRequest(req.path.split('/'));
+                        let request = this.api.parseRequest(req.apiPath.split('/'));
                         if (!request.path.segments.length) {
                             this.error = new api_core_1.ApiEdgeError(404, 'Not Found');
                             return next();
