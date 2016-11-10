@@ -2,7 +2,7 @@
 const api_core_1 = require("api-core");
 const ApiQueryStringParser_1 = require("./ApiQueryStringParser");
 class EllipseApiRouter {
-    constructor(...apis) {
+    constructor(apis) {
         this.apply = (app) => {
             let router = this;
             app.all('/v:version/*', function (req, res, next) {
@@ -56,7 +56,8 @@ class EllipseApiRouter {
                                 break;
                         }
                         let query = this.api.buildQuery(request);
-                        query.execute()
+                        query.request = request;
+                        query.execute(req.user)
                             .then((resp) => {
                             if (resp.metadata) {
                                 if (resp.metadata.pagination) {

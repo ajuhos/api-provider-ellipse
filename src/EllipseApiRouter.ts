@@ -8,7 +8,7 @@ export class EllipseApiRouter {
 
     private apiVersions: string[];
 
-    constructor(...apis: Api[]) {
+    constructor(apis: Api[]) {
         this.apis = apis;
         this.defaultApi = apis[0];
 
@@ -76,8 +76,10 @@ export class EllipseApiRouter {
                     }
 
                     let query = this.api.buildQuery(request);
+                    query.request = request;
 
-                    query.execute()
+                    //TODO: req.user - Is this an acceptable solution?
+                    query.execute(req.user)
                         .then((resp: ApiEdgeQueryResponse) => {
                             if(resp.metadata) {
                                 if(resp.metadata.pagination) {

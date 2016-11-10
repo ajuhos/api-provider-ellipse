@@ -1,6 +1,5 @@
 "use strict";
 const api_core_1 = require("api-core");
-const excludedKeys = ["sort", "embed", "fields", "skip", "limit", "page"];
 function extractWhereClauseParts(key) {
     let parts = [];
     while (key.length) {
@@ -25,7 +24,7 @@ class ApiQueryStringParser {
         const edge = lastSegment.edge, oneToOneRelations = edge.relations.filter(r => r instanceof api_core_1.OneToOneRelation).map(r => r.name);
         if (query.fields) {
             query.fields.split(',').forEach((field) => {
-                if (edge.fields.indexOf(field) == -1) {
+                if (edge.schema.fields.indexOf(field) == -1) {
                     throw new api_core_1.ApiEdgeError(400, `Invalid Field: ${field}`);
                 }
                 context.field(field);
@@ -43,7 +42,7 @@ class ApiQueryStringParser {
         if (query.sort) {
             query.sort.split(',').forEach((s) => {
                 const field = s.substring(s[0] == '-' ? 1 : 0), direction = s[0] !== '-';
-                if (edge.fields.indexOf(field) == -1) {
+                if (edge.schema.fields.indexOf(field) == -1) {
                     throw new api_core_1.ApiEdgeError(400, `Invalid Field: ${field}`);
                 }
                 context.sort(field, direction);
@@ -61,21 +60,21 @@ class ApiQueryStringParser {
             context.paginate(skip, limit);
         }
         Object.keys(query).forEach(key => {
-            if (excludedKeys.indexOf(key) == -1) {
+            if (ApiQueryStringParser.excludedKeys.indexOf(key) == -1) {
                 const value = query[key];
                 if (key.substring(0, 5) == "where") {
                     key = key.substring(5);
                     const parts = extractWhereClauseParts(key);
                     if (parts.length == 1) {
                         key = parts[0];
-                        if (edge.fields.indexOf(key) == -1) {
+                        if (edge.schema.fields.indexOf(key) == -1) {
                             throw new api_core_1.ApiEdgeError(400, `Invalid Field: ${key}`);
                         }
                         context.filter(key, api_core_1.ApiEdgeQueryFilterType.Equals, value);
                     }
                     else if (parts.length == 2) {
                         key = parts[1];
-                        if (edge.fields.indexOf(key) == -1) {
+                        if (edge.schema.fields.indexOf(key) == -1) {
                             throw new api_core_1.ApiEdgeError(400, `Invalid Field: ${key}`);
                         }
                         switch (parts[0]) {
@@ -103,7 +102,7 @@ class ApiQueryStringParser {
                     }
                 }
                 else {
-                    if (edge.fields.indexOf(key) == -1) {
+                    if (edge.schema.fields.indexOf(key) == -1) {
                         throw new api_core_1.ApiEdgeError(400, `Invalid Field: ${key}`);
                     }
                     context.filter(key, api_core_1.ApiEdgeQueryFilterType.Equals, value);
@@ -114,5 +113,6 @@ class ApiQueryStringParser {
     }
 }
 ApiQueryStringParser.defaultLimit = 10;
+ApiQueryStringParser.excludedKeys = ["sort", "embed", "fields", "skip", "limit", "page"];
 exports.ApiQueryStringParser = ApiQueryStringParser;
 //# sourceMappingURL=ApiQueryStringParser.js.map

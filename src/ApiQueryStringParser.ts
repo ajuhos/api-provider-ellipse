@@ -1,7 +1,5 @@
 import {ApiEdgeQueryContext, ApiRequestPath, ApiEdgeError, OneToOneRelation, ApiEdgeQueryFilterType} from "api-core";
 
-const excludedKeys = [ "sort", "embed", "fields", "skip", "limit", "page" ];
-
 function extractWhereClauseParts(key: string): string[] {
     let parts: string[] = [];
 
@@ -25,6 +23,7 @@ function extractWhereClauseParts(key: string): string[] {
 export class ApiQueryStringParser {
 
     static defaultLimit: number = 10;
+    static excludedKeys = [ "sort", "embed", "fields", "skip", "limit", "page" ];
 
     static parse(query: any, path: ApiRequestPath): ApiEdgeQueryContext {
         let context = new ApiEdgeQueryContext(),
@@ -39,7 +38,7 @@ export class ApiQueryStringParser {
 
         if (query.fields) {
             query.fields.split(',').forEach((field: string) => {
-                if(edge.fields.indexOf(field) == -1) {
+                if(edge.schema.fields.indexOf(field) == -1) {
                     throw new ApiEdgeError(400, `Invalid Field: ${field}`);
                 }
 
@@ -64,7 +63,7 @@ export class ApiQueryStringParser {
                 const field = s.substring(s[0] == '-' ? 1 : 0),
                     direction = s[0] !== '-';
 
-                if(edge.fields.indexOf(field) == -1) {
+                if(edge.schema.fields.indexOf(field) == -1) {
                     throw new ApiEdgeError(400, `Invalid Field: ${field}`);
                 }
 
@@ -88,7 +87,7 @@ export class ApiQueryStringParser {
         }
 
         Object.keys(query).forEach(key => {
-            if(excludedKeys.indexOf(key) == -1) {
+            if(ApiQueryStringParser.excludedKeys.indexOf(key) == -1) {
                 const value = query[key];
 
                 if(key.substring(0, 5) == "where") {
@@ -98,7 +97,7 @@ export class ApiQueryStringParser {
                     if(parts.length == 1) {
                         key = parts[0];
 
-                        if(edge.fields.indexOf(key) == -1) {
+                        if(edge.schema.fields.indexOf(key) == -1) {
                             throw new ApiEdgeError(400, `Invalid Field: ${key}`);
                         }
 
@@ -107,7 +106,7 @@ export class ApiQueryStringParser {
                     else if(parts.length == 2) {
                         key = parts[1];
 
-                        if(edge.fields.indexOf(key) == -1) {
+                        if(edge.schema.fields.indexOf(key) == -1) {
                             throw new ApiEdgeError(400, `Invalid Field: ${key}`);
                         }
 
@@ -136,7 +135,7 @@ export class ApiQueryStringParser {
                     }
                 }
                 else {
-                    if(edge.fields.indexOf(key) == -1) {
+                    if(edge.schema.fields.indexOf(key) == -1) {
                         throw new ApiEdgeError(400, `Invalid Field: ${key}`);
                     }
 

@@ -3,6 +3,6 @@ export declare class EllipseApiRouter {
     defaultApi: Api;
     apis: Api[];
     private apiVersions;
-    constructor(...apis: Api[]);
+    constructor(apis: Api[]);
     apply: (app: any) => void;
 }
