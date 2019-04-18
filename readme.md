@@ -1,6 +1,6 @@
 # api-provider-ellipse
 
-API provider for building api-core base APIs consumable 
+API provider for building api-core based APIs consumable 
 via HTTP using the Ellipse framework.
 
 ## Installation

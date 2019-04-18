@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":";AAAA,iCAA+B,wBAAwB,CAAC;AAAhD,+DAAgD;AACxD,qCAAmC,4BAA4B,CAAC;AAAxD,2EAAwD","sourcesContent":["export {EllipseApiRouter} from \"./src/EllipseApiRouter\";\nexport {ApiQueryStringParser} from \"./src/ApiQueryStringParser\";"]}

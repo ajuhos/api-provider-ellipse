@@ -22,12 +22,14 @@ export class EllipseApiRouter {
             let index = router.apiVersions.indexOf(req.params.version);
             if(index == -1) {
                 this.error = new ApiEdgeError(400, "Unsupported API version");
-                next()
+                this.respond = false;
+                return next()
             }
             else {
                 this.api = router.apis[index];
                 req.apiPath = req.path.replace(`/v${this.api.version}/`, '');
-                next()
+                this.respond = false;
+                return next()
             }
         });
 
@@ -37,7 +39,8 @@ export class EllipseApiRouter {
                 req.apiPath = req.path.replace('/', '');
             }
 
-            next()
+            this.respond = false;
+            return next()
         });
 
         app.use(function(req: any, res: any, next: any) {
@@ -48,6 +51,7 @@ export class EllipseApiRouter {
 
                     if(!request.path.segments.length) {
                         this.error = new ApiEdgeError(404, 'Not Found');
+                        this.respond = false;
                         return next()
                     }
 
@@ -93,12 +97,14 @@ export class EllipseApiRouter {
                         })
                         .catch((e: any) => {
                             this.error = e;
-                            next()
+                            this.respond = false;
+                            return next()
                         })
                 }
                 catch (e) {
                     this.error = e;
-                    next()
+                    this.respond = false;
+                    return next()
                 }
             }
         });

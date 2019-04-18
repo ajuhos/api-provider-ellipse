@@ -54,7 +54,7 @@ export class ApiQueryStringParser {
                     throw new ApiEdgeError(400, `Invalid Related Field: ${field}`);
                 }
 
-                context.populate(edge.relations[relationId].relationId)
+                context.populate(edge.relations[relationId])
             })
         }
 

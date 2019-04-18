@@ -1,6 +1,6 @@
 {
   "name": "api-provider-ellipse",
-  "version": "0.6.41",
+  "version": "0.7.1",
   "description": "API provider for building api-core based APIs consumable via HTTP using the Ellipse framework.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/ajuhos/api-provider-ellipse#readme",
   "dependencies": {
-    "api-core": "0.6.40",
+    "api-core": "0.7.1",
     "ellipse": "^0.20.0-alpha.1"
   }
 }
